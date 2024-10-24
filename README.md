@@ -93,7 +93,7 @@
  <body> <!-- Header Section --> 
   <header> 
    <div class="logo">
-    Using free
+    Free Browsing
    </div> <!-- Custom Designed Logo --> 
    <nav> <!-- Facebook and YouTube Links --> <a href="https://www.facebook.com" target="_blank">Facebook</a> <a href="https://www.youtube.com" target="_blank">YouTube</a> 
    </nav> 
