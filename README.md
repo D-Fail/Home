@@ -1,109 +1,74 @@
+// WebSocket Server তৈরি
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
 
-<html lang="en"> 
- <head> 
-  <meta charset="UTF-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title>BlueDark and White Themed Website</title> 
-  <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+wss.on('connection', (ws) => {
+  console.log('New client connected');
 
-        body {
-            background-color: #001f3f; /* BlueDark Background */
-            color: #f1f1f1; /* White Text */
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+  ws.on('message', (message) => {
+    console.log(`Received message => ${message}`);
+    // এখান থেকে আপনি ক্লায়েন্টে রিপ্লাই পাঠাতে পারেন
+    ws.send('Hello! Message received.');
+  });
 
-        /* Header Section */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: #003366; /* Darker Blue for Header */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-        }
+  ws.on('close', () => {
+    console.log('Client has disconnected');
+  });
+});
 
-        /* Logo Style */
-        .logo {
-            font-size: 30px;
-            font-weight: bold;
-            color: #f1f1f1; /* White logo */
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+console.log('WebSocket server is running on port 8080');
 
-        /* Navigation Links */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            width: 250px; /* Distance between links */
-        }
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Client</title>
+</head>
+<body>
+  <h1>WebSocket Client</h1>
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
 
-        nav a {
-            color: #f1f1f1;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
+    ws.onopen = () => {
+      console.log('Connected to the server');
+      ws.send('Hello Server');
+    };
 
-        nav a:hover {
-            color: #00aced; /* Hover Color for Facebook & YouTube */
-        }
+    ws.onmessage = (message) => {
+      console.log(`Server says: ${message.data}`);
+    };
 
-        /* Main Section */
-        .main-content {
-            text-align: center;
-            padding: 100px 20px;
-            flex-grow: 1;
-        }
-
-        .main-content h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-
-        .main-content p {
-            font-size: 20px;
-            line-height: 1.6;
-        }
-
-        /* Footer Section */
-        footer {
-            background-color: #003366; /* Darker Blue for Footer */
-            padding: 10px 0;
-            text-align: center;
-        }
-
-        footer p {
-            margin: 0;
-            color: #fff;
-            font-size: 16px;
-        }
-    </style> 
- </head> 
- <body> <!-- Header Section --> 
-  <header> 
-   <div class="logo">
-    Free Browsing
-   </div> <!-- Custom Designed Logo --> 
-   <nav> <!-- Facebook and YouTube Links --> <a href="https://www.facebook.com" target="_blank">Facebook</a> <a href="https://www.youtube.com" target="_blank">YouTube</a> 
-   </nav> 
-  </header> <!-- Main Content --> 
-  <div class="main-content"> 
-   <h1>Welcome to the BlueDark and White Themed Website</h1> 
-   <p>This is a simple website where you can find links to Facebook and YouTube. Enjoy exploring our platform!</p> 
-  </div> <!-- Footer Section --> 
-  <footer> 
-   <p>© 2024 My Website. All rights reserved.</p> 
-  </footer> 
- </body>
+    ws.onclose = () => {
+      console.log('Connection closed');
+    };
+  </script>
+</body>
 </html>
+
+const fs = require('fs');
+const https = require('https');
+const WebSocket = require('ws');
+
+// সার্টিফিকেট এবং কী লোড করা
+const server = https.createServer({
+  cert: fs.readFileSync('server.crt'),
+  key: fs.readFileSync('server.key')
+});
+
+// TLS সমর্থিত WebSocket চালানো
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  console.log('Client connected over secure WebSocket');
+
+  ws.on('message', (message) => {
+    console.log(`Received message => ${message}`);
+    ws.send('Secure connection established.');
+  });
+});
+
+// 443 (HTTPS) পোর্টে সার্ভার চালু
+server.listen(443, () => {
+  console.log('Server is running on https://localhost');
+});
+
+const ws = new WebSocket('wss://localhost');
