@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -151,8 +151,11 @@
     <!-- Header -->
     <div class="header">
         <button>🏠 Home</button>
+        
         <button>👥 Friends</button>
-        <button>📩 Messages</button>
+        
+        <button>📩 Barta</button>
+        
         <button>🔔 notificat</button>
     </div>
 
